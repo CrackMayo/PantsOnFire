@@ -3,96 +3,57 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pantsonfire;
+//package com.maratons.maratones;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 /**
  *
- * @author CrackMayo
+ * @author Usuario
  */
 public class pants {
-
-    static ArrayList<Integer> g[];
-    static boolean seen[];
-
-    /**
-     * @param args the command line arguments
-     */
-    private static void dfs(int u) {
-        seen[u] = true;
-        int len = g[u].size();
-        for (int i = 0; i < len; i++) {
-            int v = g[u].get(i);
-            if (!seen[v]) {
-                dfs(v);
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        // TODO code application logic here
-
-        Map<String, Integer> nyt;
-        nyt = new HashMap<String, Integer>();
+    public static void main(String[]args){
+        Map<String,String> nyt;
+        nyt = new HashMap<String,String>();
         Scanner scan = new Scanner(System.in);
         int n = scan.nextInt(), m = scan.nextInt();
         scan.nextLine();
-        int cont = 0;
-        seen = new boolean[193];
-        g = new ArrayList[193];
-
-        for (int i = 0; i < 193; i++) {
-            g[i] = new ArrayList<Integer>();
-        }
-        for (int i = 0; i < n; i++) {
+        for(int i=0;i<n;i++){
             String[] value = scan.nextLine().split(" are worse than ");
-            if (!nyt.containsKey(value[0])) {
-                nyt.put(value[0], cont);
-                cont++;
-            }
-            if (!nyt.containsKey(value[1])) {
-                nyt.put(value[1], cont);
-                cont++;
-            }
-
-            int u = nyt.get(value[0]);
-            int v = nyt.get(value[1]);
-            g[u].add(v);
+            nyt.put(value[0],value[1]);
         }
-        boolean ok;
-        for (int i = 0; i < m; i++) {
-            ok = true;
+        for(int i=0; i<m; i++){
             String[] trump = scan.nextLine().split(" are worse than ");
-            if (!nyt.containsKey(trump[0]) || !nyt.containsKey(trump[1])) {
-                System.out.println("Pants on Fire");
-            } else {
-
-                dfs(nyt.get(trump[0]));
-                if (seen[nyt.get(trump[1])]) {
+            if(nyt.containsKey(trump[0])){
+                String value = nyt.get(trump[0]);
+                if(value.equals(trump[1])){
                     System.out.println("Fact");
-                    ok = false;
-                }
-
-                if (ok) {
-                    seen = new boolean[193];
-                    dfs(nyt.get(trump[1]));
-                    if (seen[nyt.get(trump[0])]) {
-                        System.out.println("Alternative Fact");
-                    } else {
-                        System.out.println("Pants on Fire");
+                }else{
+                    boolean ok = false;
+                    String previo = value;
+                    while(!ok){
+                        if(!nyt.containsKey(value)){
+                            System.out.println("Pants on Fire");
+                            ok = true;
+                        }
+                        else{
+                            String valor = nyt.get(value);
+                            if(valor.equals(trump[1])){
+                                System.out.println("Fact");
+                                ok = true;
+                            }else
+                                previo = nyt.get(value);  
+                        }
                     }
-
-                }
-
+                }                
+            }else if(nyt.containsKey(trump[1]) && nyt.get(trump[1]).equals(trump[0])){
+                    System.out.println("Alternative Fact");
+                
+            }else{
+                System.out.println("Pants on Fire");
             }
-            seen = new boolean[193];
-
         }
-
     }
-
 }
