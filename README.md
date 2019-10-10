@@ -1,2 +1,2 @@
-# PantsOnFire
+# Pants On Fire
 Competitive Programming Problem
